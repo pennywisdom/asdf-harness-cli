@@ -80,26 +80,6 @@ install_version() {
 	local install_type="$1"
 	local version="$2"
 	local install_path="${3%/bin}/bin"
-	local arch="$(get_arch)"
-
-	case $(uname | tr '[:upper:]' '[:lower:]') in
-	linux*)
-		local platform="linux-${arch}"
-		local ext="tar.gz"
-		;;
-	darwin*)
-		local platform="darwin-${arch}"
-		local ext="tar.gz"
-		;;
-	windows*)
-		local platform="windows-${arch}"
-		local ext="zip"
-		;;
-	*)
-		local platform=notset
-		local ext=notset
-		;;
-	esac
 
 	if [ "$install_type" != "version" ]; then
 		fail "asdf-$TOOL_NAME supports release installs only"
