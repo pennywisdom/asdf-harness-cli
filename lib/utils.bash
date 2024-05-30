@@ -75,6 +75,7 @@ install_version() {
 	local install_path="${3%/bin}/bin"
 
 	echo "installing version ${version} to ${install_path} from ${ASDF_DOWNLOAD_PATH}..."
+	ls -la "$ASDF_DOWNLOAD_PATH"
 
 	test -d "$ASDF_DOWNLOAD_PATH" || fail "Expected $ASDF_DOWNLOAD_PATH to be a directory."
 
