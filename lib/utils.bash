@@ -44,6 +44,11 @@ download_release() {
 	# https://github.com/harness/harness-cli/releases/download/v0.0.25-Preview/harness-v0.0.25-Preview-linux-arm64.tar.gz
 	url="$GH_REPO/archive/v${version}.tar.gz"
 
+	echo "* Determining download URL for $TOOL_NAME version $version..."
+	echo "filename: $filename"
+	echo "version: $version"
+	echo "ur: $url"
+
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
