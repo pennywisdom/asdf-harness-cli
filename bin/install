@@ -22,7 +22,7 @@ get_arch() {
 	echo "${arch}"
 }
 
-install_github_cli() {
+install_harness_cli() {
 	local install_type=$1
 	local version=$2
 	local install_path=$3
@@ -50,7 +50,7 @@ install_github_cli() {
 		;;
 	esac
 
-	local filename="harness-${version}-${platform}"
+	local filename="harness-v${version}-${platform}"
 	local download_url="$(get_download_url $filename)"
 	local tmp_bin_path="${TMPDIR}/${filename}.${ext}"
 	local tmp_path="${TMPDIR}/${filename}"
@@ -77,4 +77,4 @@ get_download_url() {
 	echo "https://github.com/harness/harness-cli/releases/download/v${version}/${filename}.${ext}"
 }
 
-install_github_cli $ASDF_INSTALL_TYPE $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
+install_harness_cli $ASDF_INSTALL_TYPE $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
