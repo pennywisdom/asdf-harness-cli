@@ -39,15 +39,33 @@ download_release() {
 	version="$1"
 	filename="$2"
 
+	local arch="$(get_arch)"
+
+	case $(uname | tr '[:upper:]' '[:lower:]') in
+	linux*)
+		local platform="linux_${arch}"
+		local ext="tar.gz"
+		;;
+	darwin*)
+		local platform="macOS_${arch}"
+		local ext="$(get_ext)"
+		;;
+	*)
+		local platform=notset
+		local ext=notset
+		;;
+	esac
+
 	# TODO: Adapt the release URL convention for harness-cli
 	# url="$GH_REPO/archive/v${version}.tar.gz"
 	# https://github.com/harness/harness-cli/releases/download/v0.0.25-Preview/harness-v0.0.25-Preview-linux-arm64.tar.gz
-	url="$GH_REPO/archive/v${version}.tar.gz"
-
+	url="$GH_REPO/releases/download/v${version}/harness-v${version}-${platform}.${ext}"
+	i # https://github.com/harness/harness-cli/releases/download/v0.0.25-Preview/harness-v0.0.25-Preview-linux-amd64.tar.gz
 	echo "* Determining download URL for $TOOL_NAME version $version..."
 	echo "filename: $filename"
 	echo "version: $version"
-	echo "ur: $url"
+	echo "ext:"
+	echo "url: $url"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
