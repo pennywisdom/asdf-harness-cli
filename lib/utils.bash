@@ -52,6 +52,26 @@ install_version() {
 	local install_type="$1"
 	local version="$2"
 	local install_path="${3%/bin}/bin"
+	local arch="$(get_arch)"
+
+	case $(uname | tr '[:upper:]' '[:lower:]') in
+	linux*)
+		local platform="linux-${arch}"
+		local ext="tar.gz"
+		;;
+	darwin*)
+		local platform="darwin-${arch}"
+		local ext="tar.gz"
+		;;
+	windows*)
+		local platform="windows-${arch}"
+		local ext="zip"
+		;;
+	*)
+		local platform=notset
+		local ext=notset
+		;;
+	esac
 
 	if [ "$install_type" != "version" ]; then
 		fail "asdf-$TOOL_NAME supports release installs only"
@@ -71,4 +91,18 @@ install_version() {
 		rm -rf "$install_path"
 		fail "An error occurred while installing $TOOL_NAME $version."
 	)
+}
+
+get_arch() {
+	local machine_hardware_name="$(uname -m)"
+
+	case "$machine_hardware_name" in
+	'x86_64') local arch="amd64" ;;
+	'powerpc64le' | 'ppc64le') local arch="ppc64le" ;;
+	'aarch64') local arch="arm64" ;;
+	'armv7l') local arch="arm" ;;
+	*) local arch="$machine_hardware_name" ;;
+	esac
+
+	echo "${arch}"
 }
