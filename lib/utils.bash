@@ -74,6 +74,8 @@ install_version() {
 	local version="$2"
 	local install_path="${3%/bin}/bin"
 
+	echo "installing version ${version} to ${install_path} ..."
+
 	if [ "$install_type" != "version" ]; then
 		fail "asdf-$TOOL_NAME supports release installs only"
 	fi
