@@ -38,7 +38,7 @@ install_harness_cli() {
 		;;
 	darwin*)
 		local platform="darwin-${arch}"
-		local ext="zip"
+		local ext="tar.gz"
 		;;
 	windows*)
 		local platform="windows-${arch}"
@@ -63,7 +63,7 @@ install_harness_cli() {
 	tar -zxf $tmp_bin_path --directory $TMPDIR
 
 	echo "Moving bin to ${bin_path}"
-	cp $tmp_path/bin/harness $bin_path
+	cp $tmp_path/harness $bin_path
 
 	echo "Cleaning tmps..."
 	#rm -r $tmp_path $tmp_bin_path
