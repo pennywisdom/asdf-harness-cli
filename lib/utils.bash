@@ -43,12 +43,16 @@ download_release() {
 
 	case $(uname | tr '[:upper:]' '[:lower:]') in
 	linux*)
-		local platform="linux_${arch}"
+		local platform="linux-${arch}"
 		local ext="tar.gz"
 		;;
 	darwin*)
-		local platform="macOS_${arch}"
-		local ext="$(get_ext)"
+		local platform="darwin-${arch}"
+		local ext="tar.gz"
+		;;
+	windows*)
+		local platform="windows-${arch}"
+		local ext="zip"
 		;;
 	*)
 		local platform=notset
@@ -64,7 +68,8 @@ download_release() {
 	echo "* Determining download URL for $TOOL_NAME version $version..."
 	echo "filename: $filename"
 	echo "version: $version"
-	echo "ext:"
+	echo "ext: ${ext}"
+	echo "platform: ${platform}"
 	echo "url: $url"
 
 	echo "* Downloading $TOOL_NAME release $version..."
