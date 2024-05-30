@@ -76,6 +76,8 @@ install_version() {
 
 	echo "installing version ${version} to ${install_path} ..."
 
+	test -d "$ASDF_DOWNLOAD_PATH" || fail "Expected $ASDF_DOWNLOAD_PATH to be a directory.
+
 	if [ "$install_type" != "version" ]; then
 		fail "asdf-$TOOL_NAME supports release installs only"
 	fi
