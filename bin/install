@@ -66,7 +66,7 @@ install_harness_cli() {
 	cp $tmp_path/bin/harness $bin_path
 
 	echo "Cleaning tmps..."
-	rm -r $tmp_path $tmp_bin_path
+	#rm -r $tmp_path $tmp_bin_path
 
 	echo "Run: asdf <global | local> harness-cli ${version}"
 	chmod +x $bin_path
