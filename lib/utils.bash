@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for harness-cli.
 GH_REPO="https://github.com/harness/harness-cli"
 TOOL_NAME="harness-cli"
 TOOL_TEST="harness --version"
@@ -14,7 +13,6 @@ fail() {
 
 curl_opts=(-fsSL)
 
-# NOTE: You might want to remove this if harness-cli is not hosted on GitHub releases.
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
@@ -42,6 +40,8 @@ download_release() {
 	filename="$2"
 
 	# TODO: Adapt the release URL convention for harness-cli
+	# url="$GH_REPO/archive/v${version}.tar.gz"
+	# https://github.com/harness/harness-cli/releases/download/v0.0.25-Preview/harness-v0.0.25-Preview-linux-arm64.tar.gz
 	url="$GH_REPO/archive/v${version}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
