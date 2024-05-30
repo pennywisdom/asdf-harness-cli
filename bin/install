@@ -5,74 +5,76 @@ set -o pipefail
 
 ASDF_INSTALL_TYPE=${ASDF_INSTALL_TYPE:-version  }
 TMPDIR=${TMPDIR:-/tmp}
-[ -n "$ASDF_INSTALL_VERSION" ] || (>&2 echo 'Missing ASDF_INSTALL_VERSION' && exit 1)
-[ -n "$ASDF_INSTALL_PATH" ] || (>&2 echo 'Missing ASDF_INSTALL_PATH' && exit 1)
+[ -n "$ASDF_INSTALL_VERSION" ] || (echo >&2 'Missing ASDF_INSTALL_VERSION' && exit 1)
+[ -n "$ASDF_INSTALL_PATH" ] || (echo >&2 'Missing ASDF_INSTALL_PATH' && exit 1)
 
 get_arch() {
-  local machine_hardware_name="$(uname -m)"
+	local machine_hardware_name="$(uname -m)"
 
-  case "$machine_hardware_name" in
-    'x86_64') local arch="amd64" ;;
-    'powerpc64le' | 'ppc64le') local arch="ppc64le" ;;
-    'aarch64') local arch="arm64" ;;
-    'armv7l') local arch="arm" ;;
-    *) local arch="$machine_hardware_name" ;;
-  esac
+	case "$machine_hardware_name" in
+	'x86_64') local arch="amd64" ;;
+	'powerpc64le' | 'ppc64le') local arch="ppc64le" ;;
+	'aarch64') local arch="arm64" ;;
+	'armv7l') local arch="arm" ;;
+	*) local arch="$machine_hardware_name" ;;
+	esac
 
-  echo "${arch}"
+	echo "${arch}"
 }
 
 install_github_cli() {
-  local install_type=$1
-  local version=$2
-  local install_path=$3
+	local install_type=$1
+	local version=$2
+	local install_path=$3
 
-  local bin_install_path="$install_path/bin"
-  local bin_path="${bin_install_path}/harness"
-  local arch="$(get_arch)"
+	local bin_install_path="$install_path/bin"
+	local bin_path="${bin_install_path}/harness"
+	local arch="$(get_arch)"
 
-  case $(uname | tr '[:upper:]' '[:lower:]') in
-    linux*)
-      local platform="linux-${arch}"
-      local ext="tar.gz"
-      ;;
-    darwin*)
-      local platform="darwin-${arch}"
-      local ext="zip"
-      ;;
-		windows*)
-			local platform="windows-${arch}"
-    *)
-      local platform=notset
-      local ext=notset
-      ;;
-  esac
+	case $(uname | tr '[:upper:]' '[:lower:]') in
+	linux*)
+		local platform="linux-${arch}"
+		local ext="tar.gz"
+		;;
+	darwin*)
+		local platform="darwin-${arch}"
+		local ext="zip"
+		;;
+	windows*)
+		local platform="windows-${arch}"
+		local ext="zip"
+		;;
+	*)
+		local platform=notset
+		local ext=notset
+		;;
+	esac
 
-  local filename="harness-${version}-${platform}"
-  local download_url="$(get_download_url $filename)"
-  local tmp_bin_path="${TMPDIR}/${filename}.${ext}"
-  local tmp_path="${TMPDIR}/${filename}"
+	local filename="harness-${version}-${platform}"
+	local download_url="$(get_download_url $filename)"
+	local tmp_bin_path="${TMPDIR}/${filename}.${ext}"
+	local tmp_path="${TMPDIR}/${filename}"
 
-  echo "Downloading harness-cli from ${download_url}"
-  mkdir -p $bin_install_path
-  curl -sL $download_url -o $tmp_bin_path
+	echo "Downloading harness-cli from ${download_url}"
+	mkdir -p $bin_install_path
+	curl -sL $download_url -o $tmp_bin_path
 
-  echo "Extracting ${tmp_bin_path}"
-  tar -zxf $tmp_bin_path --directory $TMPDIR
+	echo "Extracting ${tmp_bin_path}"
+	tar -zxf $tmp_bin_path --directory $TMPDIR
 
-  echo "Moving bin to ${bin_path}"
-  cp $tmp_path/bin/gh $bin_path
+	echo "Moving bin to ${bin_path}"
+	cp $tmp_path/bin/gh $bin_path
 
-  echo "Cleaning tmps..."
-  rm -r $tmp_path $tmp_bin_path
+	echo "Cleaning tmps..."
+	rm -r $tmp_path $tmp_bin_path
 
-  echo "Run: asdf <global | local> harness-cli ${version}"
-  chmod +x $bin_path
+	echo "Run: asdf <global | local> harness-cli ${version}"
+	chmod +x $bin_path
 }
 
 get_download_url() {
-  local filename="$1"
-  echo "https://github.com/harness/harness-cli/releases/download/v${version}/${filename}.${ext}"
+	local filename="$1"
+	echo "https://github.com/harness/harness-cli/releases/download/v${version}/${filename}.${ext}"
 }
 
 install_github_cli $ASDF_INSTALL_TYPE $ASDF_INSTALL_VERSION $ASDF_INSTALL_PATH
